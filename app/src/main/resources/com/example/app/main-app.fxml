@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="100.0" minWidth="200.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.app.MainAppController">
+   <children>
+      <GridPane alignment="CENTER_RIGHT" gridLinesVisible="true" layoutX="5.0" layoutY="9.0" prefHeight="331.0" prefWidth="646.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="9.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="300.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="300.0" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="81.0" minWidth="81.0" prefWidth="81.66668701171875" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" minWidth="200.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints maxHeight="144.33334350585938" minHeight="10.0" prefHeight="15.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="144.33334350585938" minHeight="50.0" prefHeight="59.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="150.0" minHeight="75.0" prefHeight="75.0" vgrow="SOMETIMES" />
+          <RowConstraints maxHeight="1.7976931348623157E308" minHeight="-Infinity" vgrow="ALWAYS" />
+            <RowConstraints maxHeight="1.7976931348623157E308" minHeight="50.0" prefHeight="30.0" vgrow="ALWAYS" />
+          <RowConstraints maxHeight="50.0" minHeight="50.0" prefHeight="50.0" valignment="BOTTOM" vgrow="NEVER" />
+        </rowConstraints>
+         <children>
+            <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <children>
+                  <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" text="nef folder path" />
+               </children>
+            </HBox>
+            <TextField fx:id="jpegPath" editable="false" onMouseClicked="#selectJpegFolder" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="5.0" right="5.0" />
+               </GridPane.margin>
+            </TextField>
+            <HBox alignment="BOTTOM_CENTER" prefHeight="31.0" prefWidth="200.0" GridPane.rowIndex="1">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="RIGHT" text="jpeg folder path" />
+               </children>
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
+            </HBox>
+            <TextField fx:id="nefPath" editable="false" onMouseClicked="#selectNefFolder" GridPane.columnIndex="1" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="5.0" right="5.0" />
+               </GridPane.margin>
+            </TextField>
+            <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="1">
+               <children>
+                  <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" text="destination" />
+               </children>
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
+            </HBox>
+            <TextField fx:id="destinationPath" editable="false" onMouseClicked="#selectDefFolder" GridPane.columnIndex="3" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="5.0" right="5.0" />
+               </GridPane.margin>
+            </TextField>
+            <ScrollPane fx:id="listOfJpegFiles" fitToHeight="true" fitToWidth="true" GridPane.rowIndex="3">
+               <content>
+                  <ListView fx:id="jpegListFile" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+            </ScrollPane>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="5">
+               <children>
+                  <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="105.0" text="amount of files:" />
+                  <Label fx:id="amountOfJpegFile" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="101.0">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="5">
+               <children>
+                  <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="105.0" text="amount of files:" />
+                  <Label fx:id="amountOfNefFile" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="101.0">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="5">
+               <children>
+                  <Label alignment="TOP_RIGHT" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="105.0" text="amount of files:" />
+                  <Label fx:id="filesCopied" contentDisplay="RIGHT" prefHeight="17.0" prefWidth="101.0">
+                     <padding>
+                        <Insets left="5.0" />
+                     </padding>
+                  </Label>
+               </children>
+            </HBox>
+            <ScrollPane fx:id="listOfNefFiles" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+               <content>
+                  <ListView fx:id="nefListFile" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+               <GridPane.margin>
+                  <Insets left="2.0" right="2.0" />
+               </GridPane.margin>
+            </ScrollPane>
+            <ScrollPane fx:id="listOfDetinationFiles" fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="3">
+               <content>
+                  <ListView fx:id="destinationListFile" prefHeight="200.0" prefWidth="200.0" />
+               </content>
+               <GridPane.margin>
+                  <Insets left="2.0" right="2.0" />
+               </GridPane.margin>
+            </ScrollPane>
+            <Button fx:id="copyButton" defaultButton="true" disable="true" mnemonicParsing="false" onAction="#copyFiles" text="Copy" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+            <ProgressBar fx:id="copyTaskBar" maxWidth="1.7976931348623157E308" progress="0.0" GridPane.columnIndex="2" GridPane.columnSpan="2147483647" GridPane.rowIndex="4">
+               <GridPane.margin>
+                  <Insets left="5.0" right="5.0" />
+               </GridPane.margin>
+            </ProgressBar>
+         </children>
+      </GridPane>
+   </children>
+</AnchorPane>
