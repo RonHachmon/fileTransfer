@@ -1,0 +1,65 @@
+/* Apply styles to the GridPane */
+.grid-pane {
+    -fx-background-color: #f0f0f0;
+}
+
+/* Apply styles to the Labels */
+.label {
+    -fx-text-fill: #333333;
+    -fx-font-size: 14px;
+}
+
+/* Apply styles to the HBoxes */
+.hbox {
+    -fx-spacing: 10px;
+}
+
+/* Apply styles to the TextFields */
+/* Apply styles to the TextFields */
+.text-field {
+    -fx-background-color: #f7f7f7;
+    -fx-border-color: #c0c0c0;
+    -fx-border-radius: 5px;
+    -fx-padding: 5px;
+}
+
+/* Apply styles to the TextFields when hovered */
+.text-field:hover {
+    -fx-background-color: #e0e0e0;
+    -fx-border-color: #a0a0a0;
+}
+
+/* Apply styles to the Buttons */
+.button {
+    -fx-background-color: #007bff;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 12px;
+    -fx-border-radius: 5px;
+}
+
+/* Apply styles to the Buttons when hovered */
+.button:hover {
+    -fx-background-color: #0056b3;
+}
+
+/* Apply styles to the Buttons when pressed */
+.button:pressed {
+    -fx-background-color: #003980;
+}
+
+/* Apply styles to the ScrollPanes */
+.scroll-pane {
+    -fx-background-color: transparent;
+}
+
+/* Apply styles to the ListView */
+.list-view {
+    -fx-background-color: #e0e0e0;
+}
+
+
+/* Apply styles to the ProgressBar */
+.progress-bar {
+    -fx-accent: #007bff;
+}
