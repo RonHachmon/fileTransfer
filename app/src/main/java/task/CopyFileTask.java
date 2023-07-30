@@ -2,6 +2,11 @@ package task;
 
 import com.example.app.MainAppController;
 import engine.DirectoryManager;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 
 import java.util.concurrent.Executors;
@@ -12,6 +17,13 @@ import java.util.concurrent.TimeUnit;
 public class CopyFileTask extends Task<Boolean> {
 
     private long totalWorkSize = 0;
+    private SimpleIntegerProperty copiedFiles = new SimpleIntegerProperty();
+
+    public ReadOnlyIntegerProperty getCopiedFilesProperty() {
+        return copiedFiles;
+    }
+
+
     private DirectoryManager directoryManager;
     private ScheduledExecutorService timedExecute;
     private MainAppController mainAppController;
@@ -23,11 +35,6 @@ public class CopyFileTask extends Task<Boolean> {
 
         DaemonThread daemonThreadFactory = new DaemonThread();
         timedExecute = Executors.newSingleThreadScheduledExecutor(daemonThreadFactory);
-
-        /*        this.controller = bruteForceController;
-        controller.bindTaskToUIComponents(this);*/
-
-
     }
 
     ScheduledFuture<?> scheduledFuture;
@@ -48,7 +55,19 @@ public class CopyFileTask extends Task<Boolean> {
     }
 
     private void update() {
-        updateProgress(directoryManager.getTotalFilesInDestination(), totalWorkSize);
+        System.out.println("Hey i am running :)");
+        copiedFiles.setValue( directoryManager.getTotalFilesInDestination());
+        updateProgress(copiedFiles.getValue(), totalWorkSize);
+        handleIfDone();
         return;
+    }
+
+    private void handleIfDone() {
+        if(copiedFiles.getValue()>=totalWorkSize)
+        {
+            timedExecute.shutdownNow();
+            super.cancelled();
+            this.cancel();
+        }
     }
 }
