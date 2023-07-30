@@ -2,6 +2,7 @@ package com.example.app;
 
 import engine.DirectoryManager;
 import javafx.beans.binding.Bindings;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -25,11 +26,17 @@ public class MainAppController {
     @FXML
     private TextField destinationPath;
 
-    @FXML
-    private ScrollPane listOfJpegFiles;
+
+
 
     @FXML
     private ListView<String> jpegListFile;
+
+    @FXML
+    private ListView<String> nefListFile;
+    @FXML
+    private ListView<String> destinationListFile;
+
 
     @FXML
     private Label amountOfJpegFile;
@@ -40,17 +47,7 @@ public class MainAppController {
     @FXML
     private Label filesCopied;
 
-    @FXML
-    private ScrollPane listOfNefFiles;
 
-    @FXML
-    private ScrollPane listOfDetinationFiles;
-
-    @FXML
-    private ListView<String> destinationListFile;
-
-    @FXML
-    private ListView<String> nefListFile;
 
     @FXML
     private Button copyButton;
@@ -66,24 +63,20 @@ public class MainAppController {
     void copyFiles(ActionEvent event) {
         currentRunningTask = new CopyFileTask(directoryManager,this);
         new Thread(currentRunningTask).start();
-        File destFolder = new File(destinationPath.getText());
-        //directoryManager.copyFiles(destFolder);
-        List<String> listOfFilesInDirectory = directoryManager.getListOfFilesInDirectory(destFolder);
-        destinationListFile.getItems().addAll(listOfFilesInDirectory);
-        filesCopied.setText(String.valueOf(listOfFilesInDirectory.size()));
 
+        addFileNameFromFolderToList(destinationListFile,directoryManager.getDesFolder());
     }
+
 
     @FXML
     void selectJpegFolder(MouseEvent event) {
-        File selectedFile = chooseDirectory();
-        if(selectedFile!=null)
+        File selectedDirectory = chooseDirectory();
+        if(selectedDirectory!=null)
         {
-            jpegPath.setText(selectedFile.getAbsolutePath());
-            directoryManager.setJpegFolder(selectedFile);
-            List<String> listOfFilesInDirectory = directoryManager.getListOfFilesInDirectory(selectedFile);
-            jpegListFile.getItems().addAll(listOfFilesInDirectory);
-            amountOfJpegFile.setText(String.valueOf(listOfFilesInDirectory.size()));
+            jpegPath.setText(selectedDirectory.getAbsolutePath());
+            directoryManager.setJpegFolder(selectedDirectory);
+            addFileNameFromFolderToList(jpegListFile,directoryManager.getJpegFolder());
+            amountOfJpegFile.setText(String.valueOf(directoryManager.getTotalFilesInJpegFolder()));
             enableCopy();
         }
 
@@ -92,16 +85,14 @@ public class MainAppController {
 
     @FXML
     void selectNefFolder(MouseEvent event) {
-        File selectedFile = chooseDirectory();
+        File selectedDirectory = chooseDirectory();
 
-        if(selectedFile!=null)
+        if(selectedDirectory!=null)
         {
-            nefPath.setText(selectedFile.getAbsolutePath());
-            directoryManager.setNefFolder(selectedFile);
-            List<String> listOfFilesInDirectory = directoryManager.getListOfFilesInDirectory(selectedFile);
-            nefListFile.getItems().addAll(listOfFilesInDirectory);
-
-            amountOfNefFile.setText(String.valueOf(listOfFilesInDirectory.size()));
+            nefPath.setText(selectedDirectory.getAbsolutePath());
+            directoryManager.setNefFolder(selectedDirectory);
+            addFileNameFromFolderToList(nefListFile,directoryManager.getNefFolder());
+            amountOfNefFile.setText(String.valueOf(directoryManager.getTotalFilesInNefFolder()));
             enableCopy();
 
         }
@@ -111,24 +102,29 @@ public class MainAppController {
     @FXML
     void selectDefFolder(MouseEvent event) {
 
-        File selectedFile = chooseDirectory();
-        if(selectedFile!=null)
+        File selectedDirectory = chooseDirectory();
+        if(selectedDirectory!=null)
         {
-            destinationPath.setText(selectedFile.getAbsolutePath());
-            directoryManager.setDesFolder(selectedFile);
+            destinationPath.setText(selectedDirectory.getAbsolutePath());
+            directoryManager.setDesFolder(selectedDirectory);
             enableCopy();
         }
 
 
     }
 
+    private void addFileNameFromFolderToList(ListView<String> listOfFiles, File directory) {
+        listOfFiles.getItems().clear();
+        List<String> listOfFilesInDirectory = directoryManager.getListOfFilesInDirectory(directory);
+        listOfFiles.getItems().addAll(listOfFilesInDirectory);
+    }
+
+
     private void enableCopy() {
-        if(!destinationPath.getText().isEmpty() && !nefPath.getText().isEmpty()
-            && !jpegPath.getText().isEmpty())
-        {
+        if (!destinationPath.getText().isEmpty() && !nefPath.getText().isEmpty()
+                && !jpegPath.getText().isEmpty()) {
             copyButton.setDisable(false);
         }
-
     }
 
 
@@ -136,22 +132,18 @@ public class MainAppController {
 
     private File chooseDirectory() {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-        File selectedDirectory = directoryChooser.showDialog(null);
-
-
-        return selectedDirectory;
+        return directoryChooser.showDialog(null);
     }
-    public void bindTaskToUIComponents(CopyFileTask aTask) {
-
-
+    public void bindTaskToUIComponents(Task aTask) {
         // task progress bar
         copyTaskBar.progressProperty().bind(aTask.progressProperty());
 
 
-
+        filesCopied.textProperty().bind(Bindings.createStringBinding(() -> {
+            int filesCopiedValue = (int) aTask.getWorkDone();
+            return String.format("%,d", filesCopiedValue);
+        }, aTask.workDoneProperty()));
     }
-
-
 
 
 }

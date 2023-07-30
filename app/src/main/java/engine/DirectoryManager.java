@@ -1,22 +1,21 @@
 package engine;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
+
 
 public class DirectoryManager {
-    private File jpegFolder;
+    private File jpegFolder=null;
     private int totalFilesInJpegFolder;
-    private File nefFolder;
+    private File nefFolder=null;
     private int totalFilesInNefFolder;
 
-    private File desFolder;
+    private File desFolder=null;
     private int totalFilesInDestination;
 
 
@@ -40,47 +39,45 @@ public class DirectoryManager {
 
     public void copyFiles()
     {
+        if(isValidInputs()) {
 
-        File[] files = jpegFolder.listFiles(file-> file.isFile());
-        for (int i = 0; i <files.length ; i++) {
-            String name = files[i].getName();
-            String fileWithNoExtension = name.split("\\.")[0];
-            File fileToCopy = getNefFilePath(fileWithNoExtension);
-            File outputFile = parseFileDestination(this.desFolder,fileToCopy);
+            File[] jpegFiles  = jpegFolder.listFiles(file -> file.isFile());
+            for (File jpegFile : jpegFiles) {
+                String fileName = jpegFile.getName().split("\\.")[0];
+                File nefFileToCopy = new File(nefFolder, fileName + ".NEF");
+                File outputFile = new File(this.desFolder, nefFileToCopy.getName());
 
-            copyFile(fileToCopy, outputFile);
+                copyFile(nefFileToCopy, outputFile);
+            }
         }
+    }
+
+
+    private boolean isValidInputs() {
+        return jpegFolder != null && nefFolder != null && desFolder != null;
     }
 
     private void copyFile(File fileToCopy, File outputFile) {
         try {
             Files.copy(fileToCopy.toPath(), outputFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private File getNefFilePath(String fileName) {
-        String nefFilePath=nefFolder.getPath() +File.separator+ fileName+".NEF";
-        File fileToCopy = new File(nefFilePath);
-        return fileToCopy;
-    }
-    private File parseFileDestination(File destinationPath,File fileName) {
-        String nefFilePath=destinationPath.getPath() +File.separator+ fileName.getName();
-        File fileToCopy = new File(nefFilePath);
-        return fileToCopy;
-    }
+
 
     public File getJpegFolder() {
         return jpegFolder;
     }
 
     public void setJpegFolder(File jpegFolder) {
+        if(jpegFolder.isDirectory())
+        {
+            this.jpegFolder = jpegFolder;
+            this.setTotalFilesInJpegFolder();
+        }
 
-        this.jpegFolder = jpegFolder;
-        this.setTotalFilesInJpegFolder();
     }
 
     public File getNefFolder() {
@@ -88,36 +85,42 @@ public class DirectoryManager {
     }
 
     public void setNefFolder(File nefFolder) {
-
-        this.nefFolder = nefFolder;
-        this.setTotalFilesInNefFolder();
+        if(nefFolder.isDirectory()) {
+            this.nefFolder = nefFolder;
+            this.setTotalFilesInNefFolder();
+        }
     }
     public File getDesFolder() {
+
         return desFolder;
     }
 
     public void setDesFolder(File desFolder) {
-        this.desFolder = desFolder;
+        if(desFolder.isDirectory()) {
+            this.desFolder = desFolder;
+        }
     }
 
-    public int getTotalFilesInJpegFolder() {
-        return totalFilesInJpegFolder;
-    }
+
 
     private void setTotalFilesInJpegFolder() {
 
         List<String> listOfFilesInDirectory = this.getListOfFilesInDirectory(this.jpegFolder);
         this.totalFilesInJpegFolder = listOfFilesInDirectory.size();
     }
-
-    public int getTotalFilesInNefFolder() {
-        return this.totalFilesInNefFolder;
-
+    public int getTotalFilesInJpegFolder() {
+        return totalFilesInJpegFolder;
     }
+
+
 
     private void setTotalFilesInNefFolder() {
         List<String> listOfFilesInDirectory = this.getListOfFilesInDirectory(this.nefFolder);
         this.totalFilesInNefFolder = listOfFilesInDirectory.size();
+    }
+    public int getTotalFilesInNefFolder() {
+        return this.totalFilesInNefFolder;
+
     }
 
 
